@@ -60,7 +60,7 @@ public class Sistema {
 						listaHechizos.add(new HechizoDePlanta(nombre, danio, durStun, cantPlantas));		
 					}else if(tipo.equalsIgnoreCase("Agua")) {
 						
-						String[] extras = partes[3].split(";");
+						String[] extras = partes[3].split(",");
 						double cantHeal = Double.parseDouble(extras[0].trim());
 						double presionAgua = Double.parseDouble(extras[1].trim());
 						listaHechizos.add(new HechizoDeAgua(nombre, danio, cantHeal, presionAgua));
@@ -82,10 +82,10 @@ public class Sistema {
 					
 					String[] partes = linea.split(";");
 					String nombreMago = partes[0].trim();
-					Mago mago = new Mago(nombreMago); //verificar clase mago
+					Mago mago = new Mago(nombreMago); 
 					
 					if (partes.length > 1 && !partes[1].trim().isEmpty()) {
-						String[] nombresHechizos = partes[1].split("\\|");
+						String[] nombresHechizos = partes[1].split("\\|");//verificar
 						for(String nh : nombresHechizos) {
 							Hechizo h = buscarHechizo(nh.trim());
 							if(h != null) {

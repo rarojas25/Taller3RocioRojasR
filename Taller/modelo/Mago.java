@@ -8,6 +8,7 @@ public class Mago implements Puntuable {
 	
 	public Mago(String nombre) {
 		this.nombre = nombre;
+		this.hechizos = new ArrayList<>();
 	}
 	public String getNombre() {
 		return nombre;
