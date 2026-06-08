@@ -7,7 +7,10 @@ import java.util.Scanner;
 import modelo.*;
 
 import modelo.Hechizo;
-
+/*
+ * Clase Sistema
+ * Carga archivos, gestiona magos y hechizos, guarda cambios y genera los reportes del panel analista.
+ */
 public class Sistema {
 	private ArrayList<Mago>	listaMagos;
 	private ArrayList<Hechizo> listaHechizos;
@@ -19,11 +22,20 @@ public class Sistema {
 		listaMagos = new ArrayList<>();
 		listaHechizos = new ArrayList<>();
 		}
+	/*
+	 * Carga los datos de ambos archivos al iniciar el programa.
+	 */
 	
 		public void cargaDatos() {
 			cargarHechizos();
 			cargarMagos();
 		}
+		/*
+		 * Lee el archivo linea por linea
+		 * Ignora lineas vacias y la cabecera del archivo
+		 * Acepta tanto "Tierra" como "Roca" como tipo de hechizo.
+		 */
+		
 		public void cargarHechizos() {
 			File archivo = new File(RUTA_HECHIZOS);
 			if(!archivo.exists()) {
@@ -73,6 +85,9 @@ public class Sistema {
 			System.out.println(" --> " + listaHechizos.size() + " hechizos cargados.");
 		}
 		
+		/*
+		 * Lee el erchivo Magos.txt y asocia los hechizos del catalogo a cada mago.
+		 */
 		private void cargarMagos() {
 			try {
 				Scanner sc = new Scanner(new File(RUTA_MAGOS), "UTF-8");
@@ -104,10 +119,17 @@ public class Sistema {
 			}
 		}
 		
+		/*
+		 * Sobreescribe Magos.txt con el estado actual de la lista de magos
+		 */
+		
 		public void guardarDatos() {
 			guardarHechizos();
 			guardarMagos();
 		}
+		/*
+		 * Sobreescribe Hechizos.txt con el estado actual del catalogo.
+		 */
 		public void guardarHechizos() {
 			try {
 				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(RUTA_HECHIZOS), "UTF-8"));
@@ -120,6 +142,9 @@ public class Sistema {
 				System.out.println(" [ERROR] No se pudo guardar Hechizos.txt: " + e.getMessage());
 			}
 		}
+		/*
+		 * Sobreescribe Magos.txt con el estado actual del catalogo.
+		 */
 		public void guardarMagos() {
 			try {
 				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(RUTA_MAGOS), "UTF-8"));
@@ -132,6 +157,10 @@ public class Sistema {
 				System.out.println(" [ERROR] No se pudo guardar Magos.txt: " + e.getMessage());
 			}
 		}
+		
+		/*
+		 * Busca un hechizo en el catalogo por nombre (no se distingue mayusculas)
+		 */
 		public Hechizo buscarHechizo(String nombre) {
 			for(Hechizo h: listaHechizos) {
 				if(h.getNombre().equalsIgnoreCase(nombre)) {
@@ -141,6 +170,9 @@ public class Sistema {
 			return null;
 		}
 		
+		/*
+		 *Busca un mago en la lista por nombre(no se distingue mayusculas) 
+		 */
 		public Mago buscarMago(String nombre) {
 			for(Mago m : listaMagos) {
 				if(m.getNombre().equalsIgnoreCase(nombre)) {
@@ -150,6 +182,9 @@ public class Sistema {
 			return null;
 		}
 		
+		/*
+		 * Agregar un nuevo mago. No se permite nombres duplicados.
+		 */
 		public boolean agregarMago(Mago mago) {
 			if(buscarMago(mago.getNombre()) != null) {
 				System.out.println("  Error: Ya existe un mago llamado ´" + mago.getNombre() + "´." );
@@ -159,6 +194,9 @@ public class Sistema {
 			guardarMagos();
 			return true;
 		}
+		/*
+		 * Cambia el nombre del mago y reemplaza su lista de hechizos
+		 */
 		
 		public boolean modificarMago(String nombreOriginal, String nuevoNombre, ArrayList<String> nombresHechizos) {
 			Mago mago = buscarMago(nombreOriginal);
@@ -180,7 +218,10 @@ public class Sistema {
 			guardarMagos();
 			return true;
 			}
-		
+			
+			/*
+			 * Elimina un mago de la lista y del archivo
+			 */
 			public boolean eliminarMago(String nombre) {
 				Mago mago = buscarMago(nombre);
 				if(mago == null) {
@@ -192,6 +233,10 @@ public class Sistema {
 				return true;
 			}
 			
+			/*
+			 *Agrega un hechizo al catalogo. No permite nombres duplicados. 
+			 */
+			
 			public boolean agregarHechizo(Hechizo hechizo) {
 				if(buscarHechizo(hechizo.getNombre()) != null){
 					System.out.println(" Error: Ya existe un hechizo llamado ´" + hechizo.getNombre() + "´.");
@@ -202,6 +247,12 @@ public class Sistema {
 				return true;
 			}
 			
+			/*
+			 * Modifica el nombre y el daño de un hechixo existente
+			 * Como los magos guardan referencia al mismo objeto del catalogo
+			 * Los cambios se reflejan automaticamente en sus inventarios
+			 * El bucle de sincronizacion garantiza consistencia adicional
+			 */
 			public boolean modficarHechizoBase(String nombreOriginal, String nuevoNombre, double nuevoDanio) {
 				Hechizo h = buscarHechizo(nombreOriginal);
 				if(h == null)return false;
@@ -221,6 +272,9 @@ public class Sistema {
 				return true;
 			}
 			
+			/*
+			 * Elimina un hechizo del catalogo y lo remueve de todos los magos que lo tenian
+			 */
 			public boolean eliminarHechizo(String nombre) {
 				Hechizo hechizo = buscarHechizo(nombre);
 				if(hechizo == null) {
@@ -236,6 +290,9 @@ public class Sistema {
 				return true;
 			}
 			
+			/*
+			 * Retorna los 10 hechizos con mayor puntaje, de mayor a menor
+			 */
 			public ArrayList<Hechizo> getTop10Hechizos(){
 				ArrayList<Hechizo> copia = new ArrayList<>(listaHechizos);
 				ordenarHechizosDesc(copia);
@@ -248,6 +305,9 @@ public class Sistema {
 				return resultado;
 			}
 			
+			/*
+			 * Retorna los 3 magos con mayor puntaje total, de mayor a menor
+			 */
 			public ArrayList<Mago> getTop3Magos(){
 				ArrayList<Mago> copia = new ArrayList<>(listaMagos);
 				ordenarMagosDesc(copia);
@@ -260,6 +320,9 @@ public class Sistema {
 				return resultado;
 			}
 			
+			/*
+			 * Ordena hechizos a mayor a menor puntaje (bubble sort)
+			 */
 			public void ordenarHechizosDesc(ArrayList<Hechizo> lista) {
 				
 				for(int i = 0; i < lista.size() - 1 ; i++) {
@@ -272,7 +335,9 @@ public class Sistema {
 					}
 				}
 			}
-			
+			/*
+			 * Ordena maagos de mayor a menor puntaje(bubble sort)
+			 */
 			public void ordenarMagosDesc(ArrayList<Mago> lista) {
 				
 				for(int i = 0; i < lista.size() - 1 ; i++) {
@@ -285,7 +350,9 @@ public class Sistema {
 					}
 				}
 			}
-
+			/*
+			 * Getters
+			 */
 			public ArrayList<Mago> getListaMagos() {
 				return listaMagos;
 			}

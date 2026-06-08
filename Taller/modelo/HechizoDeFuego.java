@@ -1,5 +1,10 @@
 package modelo;
-
+ 
+/*
+ * Hehcizo de tipo Fuego
+ * Propiedad extra: duracionQuemadura(turno que dura la quemadura)
+ * 
+ */
 public class HechizoDeFuego extends Hechizo {
 	private int duracionQuemadura;
 
@@ -23,6 +28,9 @@ public class HechizoDeFuego extends Hechizo {
 	public String toArchivoString() {
 		return getNombre() + ";Fuego;" + formatNum(getDanio()) + ";" + duracionQuemadura;
 	}
+	/*
+	 * Patron Visitor: delega al visitante el comportamiento especifico de Fuego
+	 */
 	@Override
 	public void aceptar(VisitorHechizo visitor) {
 		visitor.visitar(this);

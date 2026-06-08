@@ -8,10 +8,18 @@ package main;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import modelo.*;
 import sistema.Sistema;
 
+/*
+ * Clase Main - Punto de entrada del programa
+ * Contiene el menu principal y los dos paneles_
+ * - Administrador: CRUD de magos y hechizos
+ * - Analista: reportes y ranking
+ * 
+ * Usa el programa visitor (VisitorDetalles) para mostrar las propiedades
+ * especificas de cada tipo de hechizo
+ */
 public class Main{
 
 		static Scanner sc = new Scanner(System.in);
@@ -57,6 +65,7 @@ public class Main{
 			}
 			sc.close();
 		}
+		//Panel Administrador
 		
 		static void menuAdministrador() {
 			boolean volver = false;
@@ -102,6 +111,7 @@ public class Main{
 			}
 		}
 		
+		// Agregar un nuevo mago pidiendo nombres y hechizos del catalogo
 		static void agregarMago()	{
 			System.out.println("--- Agregar Nuevo Mago ---");
 			String nombre = sc.nextLine().trim();
@@ -144,6 +154,9 @@ public class Main{
 			
 			}
 		}	
+		/*
+		 * Modificar el nombre y la lista de hechizos de un mago exigente
+		 */
 		
 		static void modificarMago() {
 			System.out.println(" --- Modificar Mago ---");
@@ -185,6 +198,9 @@ public class Main{
 				System.out.println("Mago modificado. Archivo guardado.");
 			}
 		}
+		/*
+		 * Elimina un mago del sistema tras confirmacion
+		 */
 		static void eliminarMago() {
 			System.out.println(" --- Eliminar Mago ---");
 			System.out.println("Nombre del mago a eliminar: ");
@@ -207,6 +223,10 @@ public class Main{
 			}
 		}
 		
+		/*
+		 * Agrega un nuevo hechizo al catalogo
+		 * Pide el nombre, tipo y propiedades segun el tipo elegido
+		 */
 		static void agregarHechizo() {
 			System.out.println(" --- Agregar Hechizo ---");
 			System.out.println("Nombre del hechizo: ");
@@ -228,7 +248,11 @@ public class Main{
 				
 			}
 		}
-		
+		/*
+		 * Modifica un hechizo existente
+		 * Usa el Visitor para mostrar sus propiedades actuales antes de editar
+		 * Permite cambia nombre, danio y las propiedades especificas del tipo
+		 */
 		static void modificarHechizo() {
 			System.out.println(" --- Modificar Hechizo ---");
 			System.out.println("Nombre del hechizo a modificar: ");
@@ -284,6 +308,9 @@ public class Main{
 			System.out.printf("Hechizo modificado. Nuevo puntaje: %.2f. Archivos guardados.%n" , hechizo.calcularPuntaje());		
 		}
 		
+		/*
+		 * Elimina un hechizo del catalogo y de todos los magos que lo tenian
+		 */
 		static void eliminarHechizo() {
 			System.out.println(" --- Eliminar Hehcizo ----");
 			System.out.println("Nombre del hechizo a eliminar: ");
@@ -309,6 +336,9 @@ public class Main{
 			}
 		}
 		
+		/*
+		 * Panel analista
+		 */
 		static void menuAnalista() {
 			boolean volver = false;
 			while(!volver) {
@@ -352,6 +382,9 @@ public class Main{
 				}
 			}
 		}
+		/*
+		 * Muestra el top 10 hechizos con mayor puntaje
+		 */
 		static void mostrarTop10Hechizos() {
 			System.out.println(" ========== TOP 10 MEJORES HECHIZOS==========");
 			ArrayList<Hechizo> top = sistema.getTop10Hechizos();
@@ -368,6 +401,9 @@ public class Main{
 			}
 		}
 		
+		/*
+		 * Muestra el top 3 magos con mayor puntaje total
+		 */
 		static void mostrarTop3Magos() {
 			System.out.println("========== TOP 3 MEJORES MAGOS ==========");
 			ArrayList<Mago> top = sistema.getTop3Magos();
@@ -382,6 +418,11 @@ public class Main{
 				
 			}
 		}
+		/*
+		 * Muestra todos los hechizos con sus propiedades especificas
+		 * Utiliza el patron Visitor (VisitorDetalles) para mostrar
+		 * las propiedades de cada tipo
+		 */
 		static void mostrarTodosHechizos() {
 			System.out.println("========== TODOS LOS HECHIZOS ==========}");
 			ArrayList<Hechizo> lista = sistema.getListaHechizos();
@@ -397,8 +438,11 @@ public class Main{
 				h.aceptar(visitor);
 			}
 			System.out.println("Total: " + lista.size() + "hechizo(s).");
-		}
+			}
 		
+			/*
+			 * Muestra todos los magos con sus hechizos
+			 */
 			static void mostrarTodosMagos() {
 				System.out.println("========= TODOS LOS MAGOS =========");
 				ArrayList<Mago> lista = sistema.getListaMagos();
@@ -414,7 +458,10 @@ public class Main{
 				}
 				System.out.println("Total: " + lista.size() + " mago(s).");
 				}
-			
+				
+				/*
+				 * Muestra todos los hechizos con su puntaje calculado
+				 */
 				static void mostrarHechizosConPuntaje() {
 					System.out.println("========= HECHIZOS CON PUNTUACION =========");
 					ArrayList<Hechizo> lista = sistema.getListaHechizos();
@@ -429,7 +476,9 @@ public class Main{
 					}
 					System.out.println("Total: " + lista.size() + " hechizo(s).");
 				}
-				
+				/*
+				 * Muestra todos los magos con su puntaje total calculado
+				 */
 				static void mostrarMagosConPuntaje() {
 					System.out.println("========= MAGOS CON PUNTUACION =========");
 					ArrayList<Mago> lista = sistema.getListaMagos();
@@ -445,6 +494,11 @@ public class Main{
 					System.out.println("Total: " + lista.size() + " mago(s).");
 				}
 				
+
+				/*
+				 * Pide al usuario los datos de un hechizo nuevo: tipo, danop y propiedades.
+				 * Se reutiliza en agregarHechizo()
+				 */
 				static Hechizo pedirDatosHechizo(String nombre) {
 					System.out.println(" Tipos: ");
 					System.out.println("1. Fuego --> Daño * DuracionQuemadura");
@@ -483,7 +537,9 @@ public class Main{
 						return null;
 					}
 				}
-				
+				/*
+				 * Lista nombre y tipo de cada hechizo del catalogo
+				 */
 				static void listarHechizosSimple() {
 					ArrayList<Hechizo> lista = sistema.getListaHechizos();
 					if(lista.isEmpty()){
@@ -494,7 +550,10 @@ public class Main{
 						System.out.println("  - " + h.getNombre() + " [" + h.getTipo() + "]" );
 					}
 				}
-				
+				 /*
+				  * Lee un entero de consola de forma segura
+				  * Si el usuario escribe letras, vuelve a pedir sin caerse
+				  */
 				static int leerEntero() {
 					while(true) {
 						try {
@@ -504,6 +563,10 @@ public class Main{
 						}
 					}
 				}
+				/*
+				 * Lee un decimal de consola de forma segura 
+				 * Si el usuario escribe algo invalido, vuelve a pedir sin caerse
+				 */
 				static double leerDecimal() {
 					while(true) {
 						try {

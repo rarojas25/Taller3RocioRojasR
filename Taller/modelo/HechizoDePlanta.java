@@ -1,5 +1,9 @@
 package modelo;
 
+/*
+ * Hechizo de tipo Planta
+ * Propiedad extra: duracionStun y cantPlant
+ */
 public class HechizoDePlanta extends Hechizo {
 	private int duracionStun;
 	private int cantPlantas;
@@ -33,6 +37,9 @@ public class HechizoDePlanta extends Hechizo {
 	public String toArchivoString() {
 		return getNombre() + ";Planta;" + formatNum(getDanio()) + ";" + duracionStun + "," + cantPlantas;
 	}
+	/*
+	 * Patron Visitor: delega al visitante el comportamiento especifico de Planta
+	 */
 	@Override
 	public void aceptar(VisitorHechizo visitor) {
 		visitor.visitar(this);

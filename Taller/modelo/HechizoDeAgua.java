@@ -1,5 +1,9 @@
 package modelo;
 
+/*
+ * Hechizo tipo Agua
+ * Propiedades extra: cantidadHeal y presionDelAgua
+ */
 public class HechizoDeAgua extends Hechizo {
 	private double cantidadHeal;
 	private double presionDelAgua;
@@ -33,6 +37,9 @@ public class HechizoDeAgua extends Hechizo {
 	public String toArchivoString() {
 		return getNombre() + ";Agua;" + formatNum(getDanio()) + ";" + formatNum(cantidadHeal) + ";" + formatNum(presionDelAgua);
 	}
+	/*
+	 * Patron Visitor: delega al visitante el comportamiento especifico de Agua
+	 */
 	@Override
 	public void aceptar(VisitorHechizo visitor) {
 		visitor.visitar(this);

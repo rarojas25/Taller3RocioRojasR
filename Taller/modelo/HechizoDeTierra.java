@@ -1,5 +1,9 @@
 package modelo;
 
+/*
+ * Hechizo de tipo Tierra (tambien acepto como Roca)
+ * Propiedad extra: mejoraDefensa
+ */
 public class HechizoDeTierra extends Hechizo {
 	private double mejoraDefensa;
 
@@ -25,7 +29,9 @@ public class HechizoDeTierra extends Hechizo {
 	public String toArchivoString() {
 		return getNombre() + ";Tierra;" + formatNum(getDanio()) + ";" + formatNum(mejoraDefensa);
 	}
-	
+	/*
+	 * Patron Visitor: delega al visitante el comportamiento especifico de Tierra
+	 */
 	@Override
 	public void aceptar(VisitorHechizo visitor) {
 		visitor.visitar(this);
